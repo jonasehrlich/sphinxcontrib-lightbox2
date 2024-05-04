@@ -11,7 +11,7 @@ from sphinx.util.typing import ExtensionMetadata
 from sphinx.writers.html5 import HTML5Translator
 
 try:
-    import sphinxcontrib.plantuml
+    import sphinxcontrib.plantuml  # type: ignore
 
     __PLANTUML_AVAILABLE__ = True
 
@@ -37,14 +37,14 @@ STATIC_FILES = (
 )
 
 
-def start_lightbox_anchor(self: HTML5Translator, uri: str):
+def start_lightbox_anchor(self: HTML5Translator, uri: str) -> None:
     """
     Write the start of a lightbox anchor to the body
     """
     self.body.append(f"""<a href="{uri}" data-lightbox="image-set">\n""")
 
 
-def end_lightbox_anchor(self: HTML5Translator, node: nodes.Element):
+def end_lightbox_anchor(self: HTML5Translator, node: nodes.Element) -> None:
     self.body.append("</a>\n")
 
 
@@ -70,7 +70,7 @@ def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
             app.add_css_file(str(dest_file_path.relative_to(static_dir)))
 
 
-def html_visit_plantuml(self: HTML5Translator, node: nodes.Element):
+def html_visit_plantuml(self: HTML5Translator, node: nodes.Element) -> None:
 
     if "html_format" in node:
         fmt = node["html_format"]
