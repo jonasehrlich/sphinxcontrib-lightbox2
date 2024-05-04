@@ -16,7 +16,7 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "sphinxcontrib.plantuml"]
+extensions = ["myst_parser", "sphinxcontrib.lightbox2", "sphinxcontrib.plantuml"]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
