@@ -1,13 +1,13 @@
 import importlib.metadata
 import pathlib
-from docutils import nodes
-import urllib.parse
 import posixpath
+import urllib.parse
+
+from docutils import nodes
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 from sphinx.util import display, osutil
 from sphinx.util.typing import ExtensionMetadata
-from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.writers.html5 import HTML5Translator
 
 try:
@@ -61,8 +61,8 @@ def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
         dest_file_path = dest_path / source_file_path.relative_to(*source_file_path.parts[:1])
         osutil.ensuredir(dest_file_path.parent)
 
-        source_file_path = pathlib.Path(__file__).parent / source_file_path
-        osutil.copyfile(source_file_path, dest_file_path)
+        abs_source_file_path = pathlib.Path(__file__).parent / source_file_path
+        osutil.copyfile(abs_source_file_path, dest_file_path)
 
         if dest_file_path.suffix == ".js":
             app.add_js_file(str(dest_file_path.relative_to(static_dir)))

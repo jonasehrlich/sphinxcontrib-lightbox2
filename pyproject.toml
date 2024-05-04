@@ -31,3 +31,22 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 120
+
+
+[tool.ruff]
+line-length = 120
+src = ["sphinxcontrib"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle error rules
+    "F",   # pycodestyle warning rules
+    "B",   # flake8-bugbear rules
+    "S",   # flake8-bandit rules
+    "PTH", # flake8-use-pathlib
+    "PLC", # pylint convention rules
+    "PLR", # pylint refactor rules
+    "PLE", # pylint error rules
+    "PLW", # pylint warning rules
+    "C90", # mccabe complexity rules
+]
