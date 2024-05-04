@@ -5,6 +5,7 @@ description = "Sphinx extension to add lightbox2 to each figure and image added 
 authors = ["Jonas Ehrlich <jonas.ehrlich@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+documentation = "https://sphinxcontrib-lightbox2.readthedocs.io/"
 packages = [{ include = "sphinxcontrib" }]
 
 [tool.poetry.dependencies]
