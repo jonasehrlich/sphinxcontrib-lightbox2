@@ -4,7 +4,7 @@ import json
 import pathlib
 import posixpath
 import urllib.parse
-from typing import Generic, TypeVar
+from typing import Any, Generic, TypeVar
 
 from docutils import nodes
 from sphinx.application import Sphinx
@@ -54,7 +54,7 @@ class Lightbox2ConfigOption(Generic[T]):
         return snake_to_camel(self.name)
 
 
-CONFIG_OPTIONS = (
+CONFIG_OPTIONS: tuple[Lightbox2ConfigOption[Any], ...] = (
     Lightbox2ConfigOption("always_show_nav_on_touch_devices", False),
     Lightbox2ConfigOption("album_label", "Image %1 of %2"),
     Lightbox2ConfigOption("disable_scrolling", False),
