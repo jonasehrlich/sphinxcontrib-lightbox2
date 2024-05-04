@@ -24,3 +24,25 @@ Add `sphinxcontrib.lightbox2` to the list of `extensions` in your *conf.py*:
 ``` python
 extensions = ["sphinxcontrib.lightbox2"]
 ```
+
+## Configuration
+
+Lightbox2 offers different configuration [options](https://lokeshdhakar.com/projects/lightbox2/#options).
+These options are exposed in `sphinxcontrib-lightbox2` through options in the *conf.py*.
+
+See the mapping of lightbox2 options to Sphinx options
+
+| Lightbox2 option name | Sphinx Option Name | Default Value |
+| ----------------------|--------------------|---------------|
+| `alwaysShowNavOnTouchDevices` | `lightbox2_always_show_nav_on_touch_devices` | `False` |
+| `albumLabel` | `lightbox2_album_label` | `"Image %1 of %2"` |
+| `disableScrolling` | `lightbox2_disable_scrolling`| `False` |
+| `fadeDuration` | `lightbox2_fade_duration`| `600` |
+| `fitImagesInViewport` | `lightbox2_fit_images_in_viewport`| `True` |
+| `imageFadeDuration` | `lightbox2_image_fade_duration`| `600` |
+| `maxWidth` | `lightbox2_max_width`| `None` |
+| `maxHeight` | `lightbox2_max_height`| `None` |
+| `positionFromTop` | `lightbox2_position_from_top`| `50` |
+| `resizeDuration` | `lightbox2_resize_duration`| `700` |
+| `showImageNumberLabel` | `lightbox2_show_image_number_label`| `True` |
+| `wrapAround` | `lightbox2_wrap_around`| `True` |

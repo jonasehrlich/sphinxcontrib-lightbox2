@@ -1,10 +1,14 @@
+import dataclasses
 import importlib.metadata
+import json
 import pathlib
 import posixpath
 import urllib.parse
+from typing import Generic, TypeVar
 
 from docutils import nodes
 from sphinx.application import Sphinx
+from sphinx.config import Config
 from sphinx.environment import BuildEnvironment
 from sphinx.util import display, osutil
 from sphinx.util.typing import ExtensionMetadata
@@ -26,6 +30,7 @@ except importlib.metadata.PackageNotFoundError:  # pragma: no cover
     # No metadata is available, this could be because the tool is running from source
     __version__ = "unknown"
 
+T = TypeVar("T")
 STATIC_FILES = (
     pathlib.Path("assets/images/close.png"),
     pathlib.Path("assets/images/next.png"),
@@ -35,6 +40,53 @@ STATIC_FILES = (
     pathlib.Path("assets/js/lightbox-plus-jquery.min.map"),
     pathlib.Path("assets/css/lightbox.min.css"),
 )
+
+
+@dataclasses.dataclass
+class Lightbox2ConfigOption(Generic[T]):
+    name: str
+    default: T
+
+    def sphinx_config_name(self) -> str:
+        return "lightbox2_" + self.name
+
+    def js_config_name(self) -> str:
+        return snake_to_camel(self.name)
+
+
+CONFIG_OPTIONS = (
+    Lightbox2ConfigOption("always_show_nav_on_touch_devices", False),
+    Lightbox2ConfigOption("album_label", "Image %1 of %2"),
+    Lightbox2ConfigOption("disable_scrolling", False),
+    Lightbox2ConfigOption("fade_duration", 600),
+    Lightbox2ConfigOption("fit_images_in_viewport", True),
+    Lightbox2ConfigOption("image_fade_duration", 600),
+    Lightbox2ConfigOption("max_width", None),
+    Lightbox2ConfigOption("max_height", None),
+    Lightbox2ConfigOption("position_from_top", 50),
+    Lightbox2ConfigOption("resize_duration", 700),
+    Lightbox2ConfigOption("show_image_number_label", True),
+    Lightbox2ConfigOption("wrap_around", True),
+)
+
+
+def snake_to_camel(snake_str: str) -> str:
+    """Translate a snake_case string to camelCase"""
+    components = snake_str.split("_")
+    # Capitalize the first letter of each component except the first one
+    return components[0] + "".join(x.title() for x in components[1:])
+
+
+def render_lightbox2_option_method_call(config: Config) -> str:
+    """Render the lightbox.options method call with the configured options to a string"""
+    lightbox_options = {}
+
+    for option in CONFIG_OPTIONS:
+        val = getattr(config, option.sphinx_config_name(), None)
+        if val is None:
+            continue
+        lightbox_options[option.js_config_name()] = val
+    return f"lightbox.option({json.dumps(lightbox_options)})"
 
 
 def start_lightbox_anchor(self: HTML5Translator, uri: str) -> None:
@@ -68,6 +120,10 @@ def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
             app.add_js_file(str(dest_file_path.relative_to(static_dir)))
         elif dest_file_path.suffix == ".css":
             app.add_css_file(str(dest_file_path.relative_to(static_dir)))
+
+    lightbox_options_path = dest_path / "js" / "lightbox2-options.js"
+    lightbox_options_path.write_text(render_lightbox2_option_method_call(env.config))
+    app.add_js_file(str(lightbox_options_path.relative_to(static_dir)))
 
 
 def html_visit_plantuml(self: HTML5Translator, node: nodes.Element) -> None:
@@ -108,6 +164,11 @@ def html_depart_image(self: HTML5Translator, node: nodes.Element) -> None:
 
 def setup(app: Sphinx) -> ExtensionMetadata:
     app.require_sphinx("7.0")
+
+    for option in CONFIG_OPTIONS:
+        app.add_config_value(
+            option.sphinx_config_name(), default=option.default, rebuild="env", types=type(option.default)
+        )
 
     if __PLANTUML_AVAILABLE__:
         # sphinxcontrib.plantuml is available, override require the extension to be setup before we continue
