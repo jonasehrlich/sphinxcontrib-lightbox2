@@ -18,6 +18,10 @@ Diagram with multiple components
 
 ### PlantUML diagram
 
+::: {warning}
+The lightbox does not work with the *plantuml_output_format* `svg_obj`. All other formats are supported.
+:::
+
 :::{uml} sequence-chart.puml
 :caption: Caption with **bold** and *italic*
 :::
