@@ -174,7 +174,7 @@ def html_depart_image(self: HTML5Translator, node: nodes.Element) -> None:
     """Node departer for image nodes. This closes the lightbox2 anchor element after departing the image the image"""
     try:
         HTML5Translator.depart_image(self, node)
-    except nodes.SkipNode:
+    finally:
         end_lightbox_anchor(self, node)
 
 
