@@ -6,6 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+
 from sphinxcontrib.lightbox2 import __version__
 
 project = "sphinxcontrib-lightbox2"
@@ -48,3 +50,9 @@ lightbox2_image_fade_duration = 100
 
 # -- Options for sphinxcontrib-mermaid ---------------------------------------
 mermaid_output_format = "png"
+
+mermaid_params = []
+
+if "READTHEDOCS" in os.environ:
+    # Required to build with sphinxcontrib-mermaid on readthedocs
+    mermaid_params.extend(["-p" "puppeteer-config.json"])

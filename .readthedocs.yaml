@@ -10,20 +10,19 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.12"
+    nodejs: "latest"
   apt_packages:
     - "plantuml"
+
   jobs:
     post_create_environment:
       # Install poetry
       # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
     post_install:
+      - npm install -g @mermaid-js/mermaid-cli
       - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
   configuration: docs/conf.py
-
-# If using Sphinx, optionally build your docs in additional formats such as PDF
-# formats:
-#    - pdf
