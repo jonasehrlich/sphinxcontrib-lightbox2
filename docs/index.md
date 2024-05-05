@@ -1,6 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 
 :::{include} ../README.md
+:end-before: "## Examples"
 :::
 
 ## Examples

@@ -46,3 +46,9 @@ See the mapping of lightbox2 options to Sphinx options
 | `resizeDuration` | `lightbox2_resize_duration`| `700` |
 | `showImageNumberLabel` | `lightbox2_show_image_number_label`| `True` |
 | `wrapAround` | `lightbox2_wrap_around`| `True` |
+
+<!-- README is only included in documentation until here -->
+
+## Examples
+
+See the examples in the [documentation](https://sphinxcontrib-lightbox2.readthedocs.io/#examples).
