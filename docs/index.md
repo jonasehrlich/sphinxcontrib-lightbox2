@@ -74,7 +74,8 @@ Use the `uml` directive from the `sphinxcontrib.plantuml` extension to add the e
 ````
 
 ``` rst
-.. uml:: large-diagram.drawio.svg
+.. uml:: sequence-chart.puml
+   :caption: Caption with **bold** and *italic*
 ```
 
 ::::
