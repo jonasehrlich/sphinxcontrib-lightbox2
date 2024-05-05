@@ -1,4 +1,5 @@
 import dataclasses
+import hashlib
 import importlib.metadata
 import json
 import pathlib
@@ -21,6 +22,15 @@ try:
 
 except ImportError:
     __PLANTUML_AVAILABLE__ = False
+
+
+try:
+    import sphinxcontrib.mermaid  # type: ignore
+
+    __MERMAID_AVAILABLE__ = True
+
+except ImportError:
+    __MERMAID_AVAILABLE__ = False
 
 try:
     # Poetry requires the version to be defined in pyproject.toml, load the version from the metadata,
@@ -168,6 +178,38 @@ def html_depart_image(self: HTML5Translator, node: nodes.Element) -> None:
         end_lightbox_anchor(self, node)
 
 
+def html_visit_mermaid(self: HTML5Translator, node: nodes.Element) -> None:
+    """
+    Node visitor that wraps the ``html_visit_mermaid`` visitor from the `sphinxcontrib.mermaid` extension.
+
+    This is only done if the format is configured to be png.
+    """
+    _fmt = self.builder.config.mermaid_output_format
+
+    if _fmt != "png":
+        sphinxcontrib.mermaid.html_visit_mermaid(self, node)
+        return
+
+    code = node["code"]
+    options = node["options"]
+    prefix = "mermaid"
+
+    hashkey = (code + str(options) + str(self.builder.config.mermaid_sequence_config)).encode("utf-8")
+    basename = f"{prefix}-{hashlib.sha1(hashkey).hexdigest()}"  # noqa: S324
+    fname = f"{basename}.{_fmt}"
+    relfn = posixpath.join(self.builder.imgpath, fname)
+
+    self.body.append(f"""<a href="{relfn}" data-lightbox="image-set">\n""")
+
+    try:
+        sphinxcontrib.mermaid.html_visit_mermaid(self, node)
+    except nodes.SkipNode:
+        # Catch the SkipNode exception so that the depart_* function is not entered
+        # But the anchor element still needs to be closed
+        end_lightbox_anchor(self, node)
+        raise
+
+
 def setup(app: Sphinx) -> ExtensionMetadata:
     app.require_sphinx("7.0")
 
@@ -177,10 +219,14 @@ def setup(app: Sphinx) -> ExtensionMetadata:
         )
 
     if __PLANTUML_AVAILABLE__:
-        # sphinxcontrib.plantuml is available, override require the extension to be setup before we continue
+        # sphinxcontrib.plantuml is available, require the extension to be setup before we continue
         app.setup_extension("sphinxcontrib.plantuml")
         # Get the translation handler for plantuml and replace it with our wrapper
         app.add_node(sphinxcontrib.plantuml.plantuml, override=True, html=(html_visit_plantuml, None))
+
+    if __MERMAID_AVAILABLE__:
+        app.setup_extension("sphinxcontrib.mermaid")
+        app.add_node(sphinxcontrib.mermaid.mermaid, override=True, html=(html_visit_mermaid, None))
 
     app.add_node(nodes.image, override=True, html=(html_visit_image, html_depart_image))
 

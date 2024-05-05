@@ -16,7 +16,13 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "sphinx_design", "sphinxcontrib.lightbox2", "sphinxcontrib.plantuml"]
+extensions = [
+    "myst_parser",
+    "sphinx_design",
+    "sphinxcontrib.lightbox2",
+    "sphinxcontrib.plantuml",
+    "sphinxcontrib.mermaid",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
@@ -39,3 +45,6 @@ myst_enable_extensions = ["colon_fence"]
 # The time it takes for the Lightbox container and overlay to fade in and out, in milliseconds
 lightbox2_fade_duration = 100
 lightbox2_image_fade_duration = 100
+
+# -- Options for sphinxcontrib-mermaid ---------------------------------------
+mermaid_output_format = "png"

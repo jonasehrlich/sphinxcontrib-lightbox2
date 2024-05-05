@@ -58,7 +58,7 @@ Use a normal image directive to add the behavior to images.
 
 ### PlantUML diagram
 
-::: {warning}
+::: {important}
 The lightbox does not work with the *plantuml_output_format* `svg_obj`. All other formats are supported.
 :::
 
@@ -83,4 +83,32 @@ Use the `uml` directive from the `sphinxcontrib.plantuml` extension to add the e
 
 :::{uml} sequence-chart.puml
 :caption: Caption with **bold** and *italic*
+:::
+
+### Mermaid diagram
+
+::: {important}
+The lightbox effect is only supported if *mermaid_output_format* is set to `png`. Other formats either produce inline SVG or are handled by `mermaid-js` in the browser directly.
+
+Using the *mermaid_output_format* `png` requires the `mermaid-cli` to be available.
+:::
+
+Use the `mermaid` directive from the `sphinxcontrib.mermaid` extension to add the effect to Mermaid diagrams.
+
+:::::{dropdown} Syntax
+::::{tab-set-code}
+
+```` markdown
+```{mermaid} sequence-chart.mmd
+```
+````
+
+``` rst
+.. mermaid:: sequence-chart.mmd
+```
+
+::::
+:::::
+
+:::{mermaid} sequence-chart.mmd
 :::
