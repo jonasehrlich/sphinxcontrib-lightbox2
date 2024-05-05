@@ -56,7 +56,7 @@ Use a normal image directive to add the behavior to images.
 :::{image} large-diagram.drawio.svg
 :::
 
-### PlantUML diagram
+### PlantUML Diagram
 
 ::: {important}
 The lightbox does not work with the *plantuml_output_format* `svg_obj`. All other formats are supported.
@@ -85,10 +85,11 @@ Use the `uml` directive from the `sphinxcontrib.plantuml` extension to add the e
 :caption: Caption with **bold** and *italic*
 :::
 
-### Mermaid diagram
+### Mermaid Diagram
 
 ::: {important}
-The lightbox effect is only supported if *mermaid_output_format* is set to `png`. Other formats either produce inline SVG or are handled by `mermaid-js` in the browser directly.
+The lightbox effect is only supported if *mermaid_output_format* is set to `png`.
+Other formats either produce inline SVG or are handled by `mermaid-js` in the browser directly.
 
 Using the *mermaid_output_format* `png` requires the `mermaid-cli` to be available.
 :::
