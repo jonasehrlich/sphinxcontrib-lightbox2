@@ -32,7 +32,7 @@ These options are exposed in `sphinxcontrib-lightbox2` through options in the *c
 
 See the mapping of lightbox2 options to Sphinx options
 
-| Lightbox2 option name | Sphinx Option Name | Default Value |
+| Lightbox2 Option Name | Sphinx Option Name | Default Value |
 | ----------------------|--------------------|---------------|
 | `alwaysShowNavOnTouchDevices` | `lightbox2_always_show_nav_on_touch_devices` | `False` |
 | `albumLabel` | `lightbox2_album_label` | `"Image %1 of %2"` |
