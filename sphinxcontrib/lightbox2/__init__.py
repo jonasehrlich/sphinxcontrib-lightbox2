@@ -90,17 +90,17 @@ def render_lightbox2_option_method_call(config: Config) -> str:
 
 
 def start_lightbox_anchor(self: HTML5Translator, uri: str) -> None:
-    """
-    Write the start of a lightbox anchor to the body
-    """
+    """Write the start of a lightbox anchor to the body"""
     self.body.append(f"""<a href="{uri}" data-lightbox="image-set">\n""")
 
 
 def end_lightbox_anchor(self: HTML5Translator, node: nodes.Element) -> None:
+    """Close the lightbox2 anchor element"""
     self.body.append("</a>\n")
 
 
 def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
+    """Install the static lightbox2 files and configuration options"""
     static_dir = pathlib.Path(app.builder.outdir) / app.config.html_static_path[0]
     dest_path = pathlib.Path(static_dir)
 
@@ -127,6 +127,7 @@ def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
 
 
 def html_visit_plantuml(self: HTML5Translator, node: nodes.Element) -> None:
+    """Node visitor that wraps the ``html_visit_plantuml`` visitor from the `sphinxcontrib.plantuml` extension."""
 
     if "html_format" in node:
         fmt = node["html_format"]
@@ -141,14 +142,16 @@ def html_visit_plantuml(self: HTML5Translator, node: nodes.Element) -> None:
         sphinxcontrib.plantuml.html_visit_plantuml(self, node)
     except nodes.SkipNode:
         # Catch the SkipNode exception so that the depart_* function is not entered
-        raise
-    finally:
         # But the anchor element still needs to be closed
         end_lightbox_anchor(self, node)
+        raise
 
 
 def html_visit_image(self: HTML5Translator, node: nodes.Element) -> None:
-
+    """
+    Node visitor for image nodes. This adds the lightbox2 anchor element before the image and calls
+    ``HTML5Translator.visit_image`` afterwards.
+    """
     olduri = node["uri"]
     # Rewrite the URI if the environment knows about it
     if olduri in self.builder.images:
@@ -158,8 +161,11 @@ def html_visit_image(self: HTML5Translator, node: nodes.Element) -> None:
 
 
 def html_depart_image(self: HTML5Translator, node: nodes.Element) -> None:
-    HTML5Translator.depart_image(self, node)
-    end_lightbox_anchor(self, node)
+    """Node departer for image nodes. This closes the lightbox2 anchor element after departing the image the image"""
+    try:
+        HTML5Translator.depart_image(self, node)
+    except nodes.SkipNode:
+        end_lightbox_anchor(self, node)
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
