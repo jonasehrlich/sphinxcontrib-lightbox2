@@ -2,6 +2,12 @@
 
 # Changelog
 
+## v0.3.0 (2023-05-05)
+
+## Added
+
+* Support for mermaid diagrams with the `sphinxcontrib.mermaid` extension
+
 ## v0.2.0 (2024-05-04)
 
 ### Added
