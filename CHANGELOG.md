@@ -2,7 +2,11 @@
 
 # Changelog
 
-## v0.3.0 (2023-05-05)
+## v0.4.0 (2024-09-19)
+
+* Add support for Sphinx > 8
+
+## v0.3.0 (2024-05-05)
 
 ## Added
 
