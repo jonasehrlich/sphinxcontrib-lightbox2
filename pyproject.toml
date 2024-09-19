@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sphinxcontrib-lightbox2"
-version = "0.3.0"
+version = "0.4.0"
 description = "Sphinx extension to add lightbox2 to each figure and image added in HTML"
 authors = ["Jonas Ehrlich <jonas.ehrlich@gmail.com>"]
 license = "MIT"
@@ -13,7 +13,6 @@ packages = [{ include = "sphinxcontrib" }]
 [tool.poetry.dependencies]
 python = "^3.10"
 sphinx = ">=7,<9"
-
 
 [tool.poetry.group.docs.dependencies]
 myst-parser = "^4.0.0"
