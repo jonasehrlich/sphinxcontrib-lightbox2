@@ -7,6 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 import os
+import pathlib
 
 from sphinxcontrib.lightbox2 import __version__
 
@@ -55,4 +56,4 @@ mermaid_params = []
 
 if any(var in os.environ for var in ("CI", "READTHEDOCS")):
     # Required to build with sphinxcontrib-mermaid on containerized environments such as GitHub Actions and ReadTheDocs
-    mermaid_params.extend(["-p", "puppeteer-config.json"])
+    mermaid_params.extend(["-p", str(pathlib.Path(__file__).parent / "puppeteer-config.json")])
