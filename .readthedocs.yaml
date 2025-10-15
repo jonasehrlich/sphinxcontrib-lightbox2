@@ -25,8 +25,6 @@ build:
       - asdf global uv latest
     create_environment:
       - uv venv "${READTHEDOCS_VIRTUALENV_PATH}"
-    post_install:
-      - npm install -g @mermaid-js/mermaid-cli
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install
     install:
       - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync --frozen --group docs
+      - npm install -g @mermaid-js/mermaid-cli
