@@ -53,6 +53,6 @@ mermaid_output_format = "png"
 
 mermaid_params = []
 
-if "READTHEDOCS" in os.environ:
-    # Required to build with sphinxcontrib-mermaid on readthedocs
+if any(var in os.environ for var in ("CI", "READTHEDOCS")):
+    # Required to build with sphinxcontrib-mermaid on containerized environments such as GitHub Actions and ReadTheDocs
     mermaid_params.extend(["-p", "puppeteer-config.json"])
