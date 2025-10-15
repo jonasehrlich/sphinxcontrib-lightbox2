@@ -1,44 +1,49 @@
-[tool.poetry]
+[project]
 name = "sphinxcontrib-lightbox2"
 version = "0.4.0"
 description = "Sphinx extension to add lightbox2 to each figure and image added in HTML"
-authors = ["Jonas Ehrlich <jonas.ehrlich@gmail.com>"]
-license = "MIT"
+authors = [{ name = "Jonas Ehrlich", email = "jonas.ehrlich@gmail.com" }]
+requires-python = ">=3.10"
 readme = "README.md"
-homepage = "https://github.com/jonasehrlich/sphinxcontrib-lightbox2"
-repository = "https://github.com/jonasehrlich/sphinxcontrib-lightbox2"
-documentation = "https://sphinxcontrib-lightbox2.readthedocs.io/"
-packages = [{ include = "sphinxcontrib" }]
+license = "MIT"
+dependencies = ["sphinx>=7"]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-sphinx = ">=7,<9"
+[project.urls]
+Homepage = "https://github.com/jonasehrlich/sphinxcontrib-lightbox2"
+Repository = "https://github.com/jonasehrlich/sphinxcontrib-lightbox2"
+Documentation = "https://sphinxcontrib-lightbox2.readthedocs.io/"
 
-[tool.poetry.group.docs.dependencies]
-myst-parser = "^4.0.0"
-furo = "^2024.4.27"
-sphinx-autobuild = "^2024.4.16"
-sphinxcontrib-plantuml = "^0.29"
-sphinx-design = "^0.6.1"
-sphinxcontrib-mermaid = "^0.9.2"
+[dependency-groups]
+docs = [
+    "furo>=2024.8.6",
+    "myst-parser>=4.0.0",
+    "sphinx>=8.0.2",
+    "sphinx-autobuild>=2024.9.19",
+    "sphinx-design>=0.6.1",
+    "sphinxcontrib-mermaid>=0.9.2",
+    "sphinxcontrib-plantuml>=0.29",
+]
+dev = [
+    "mypy>=1.18.2",
+    "pytest>=8.2.2",
+    "pytest-cov>=7.0.0",
+    "pytest-sugar>=1.0.0",
+    "ruff>=0.5.2",
+    "types-docutils>=0.21.0.20240907",
+]
 
+[tool.uv]
+default-groups = ["docs", "dev"]
 
-[tool.poetry.group.dev.dependencies]
-isort = "^5.13.2"
-ruff = "^0.4.3"
-black = "^24.4.2"
-mypy = "^1.10.0"
-types-docutils = "^0.21.0.20240423"
+[tool.hatch.build.targets.sdist]
+include = ["sphinxcontrib"]
+
+[tool.hatch.build.targets.wheel]
+include = ["sphinxcontrib"]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.black]
-line-length = 120
-
-[tool.mypy]
-strict = true
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 120
@@ -57,3 +62,8 @@ select = [
     "PLW", # pylint warning rules
     "C90", # mccabe complexity rules
 ]
+
+
+[tool.mypy]
+packages = ["chrometrace"]
+strict = true

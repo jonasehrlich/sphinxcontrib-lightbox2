@@ -5,24 +5,28 @@
 # Required
 version: 2
 
+# Build documentation in the docs/ directory with Sphinx
+sphinx:
+  configuration: docs/conf.py
+
 # Set the version of Python and other tools you might need
 build:
   os: ubuntu-22.04
   tools:
-    python: "3.12"
+    python: "3.13"
     nodejs: "latest"
   apt_packages:
     - "plantuml"
 
   jobs:
-    post_create_environment:
-      # Install poetry
-      # https://python-poetry.org/docs/#installing-manually
-      - pip install poetry
+    pre_create_environment:
+      - asdf plugin add uv
+      - asdf install uv latest
+      - asdf global uv latest
+    create_environment:
+      - uv venv "${READTHEDOCS_VIRTUALENV_PATH}"
     post_install:
       - npm install -g @mermaid-js/mermaid-cli
       - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install
-
-# Build documentation in the docs/ directory with Sphinx
-sphinx:
-  configuration: docs/conf.py
+    install:
+      - UV_PROJECT_ENVIRONMENT="${READTHEDOCS_VIRTUALENV_PATH}" uv sync --frozen --group docs
