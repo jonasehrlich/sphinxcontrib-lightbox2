@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Install PlantUML
+        run: sudo apt-get install plantuml
       - name: Install uv
         uses: astral-sh/setup-uv@v6
         with:
