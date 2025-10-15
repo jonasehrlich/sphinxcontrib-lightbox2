@@ -25,7 +25,5 @@ jobs:
         run: uv run mypy
       - name: lint
         run: uv run ruff check --output-format github
-
-      - name: Build docs
-        run: |
-          poetry run sphinx-build docs docs/_build
+      - name: build-docs
+        run: uv run sphinx-build -W docs docs/_build
