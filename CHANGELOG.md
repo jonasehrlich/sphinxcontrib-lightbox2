@@ -2,6 +2,10 @@
 
 # Changelog
 
+## v0.5.0 (2025-10-15)
+
+* Switch dependency management to uv
+
 ## v0.4.0 (2024-09-19)
 
 * Add support for Sphinx > 8
