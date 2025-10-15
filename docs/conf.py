@@ -55,4 +55,4 @@ mermaid_params = []
 
 if "READTHEDOCS" in os.environ:
     # Required to build with sphinxcontrib-mermaid on readthedocs
-    mermaid_params.extend(["-p" "puppeteer-config.json"])
+    mermaid_params.extend(["-p", "puppeteer-config.json"])
