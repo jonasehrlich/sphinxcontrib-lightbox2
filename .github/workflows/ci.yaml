@@ -10,8 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install PlantUML
-        run: sudo apt-get install plantuml
+      - run: sudo apt-get update
+      - run: sudo apt-get install plantuml
       - name: Install Mermaid CLI
         run: npm install -g @mermaid-js/mermaid-cli
       - name: Install uv
