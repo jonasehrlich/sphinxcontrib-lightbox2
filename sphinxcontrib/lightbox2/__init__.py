@@ -10,27 +10,23 @@ from typing import Any, Generic, TypeVar
 from docutils import nodes
 from sphinx.application import Sphinx
 from sphinx.config import Config
-from sphinx.environment import BuildEnvironment
-from sphinx.util import display, osutil
 from sphinx.util.typing import ExtensionMetadata
 from sphinx.writers.html5 import HTML5Translator
 
 try:
     import sphinxcontrib.plantuml  # type: ignore
-
-    __PLANTUML_AVAILABLE__ = True
-
 except ImportError:
     __PLANTUML_AVAILABLE__ = False
+else:
+    __PLANTUML_AVAILABLE__ = True
 
 
 try:
     import sphinxcontrib.mermaid  # type: ignore
-
-    __MERMAID_AVAILABLE__ = True
-
 except ImportError:
     __MERMAID_AVAILABLE__ = False
+else:
+    __MERMAID_AVAILABLE__ = True
 
 try:
     # Poetry requires the version to be defined in pyproject.toml, load the version from the metadata,
@@ -42,13 +38,13 @@ except importlib.metadata.PackageNotFoundError:  # pragma: no cover
 
 T = TypeVar("T")
 STATIC_FILES = (
-    pathlib.Path("assets/images/close.png"),
-    pathlib.Path("assets/images/next.png"),
-    pathlib.Path("assets/images/prev.png"),
-    pathlib.Path("assets/images/loading.gif"),
-    pathlib.Path("assets/js/lightbox-plus-jquery.min.js"),
-    pathlib.Path("assets/js/lightbox-plus-jquery.min.map"),
-    pathlib.Path("assets/css/lightbox.min.css"),
+    pathlib.Path("images/close.png"),
+    pathlib.Path("images/next.png"),
+    pathlib.Path("images/prev.png"),
+    pathlib.Path("images/loading.gif"),
+    pathlib.Path("js/lightbox-plus-jquery.min.js"),
+    pathlib.Path("js/lightbox-plus-jquery.min.map"),
+    pathlib.Path("css/lightbox.min.css"),
 )
 
 
@@ -109,31 +105,17 @@ def end_lightbox_anchor(self: HTML5Translator, node: nodes.Element) -> None:
     self.body.append("</a>\n")
 
 
-def install_static_files(app: Sphinx, env: BuildEnvironment) -> None:
-    """Install the static lightbox2 files and configuration options"""
-    static_dir = pathlib.Path(app.builder.outdir) / app.config.html_static_path[0]
-    dest_path = pathlib.Path(static_dir)
-
-    for source_file_path in display.status_iterator(
-        STATIC_FILES,
-        "Copying static files for sphinxcontrib-lightbox2...",
-        "brown",
-        len(STATIC_FILES),
-    ):
-        dest_file_path = dest_path / source_file_path.relative_to(*source_file_path.parts[:1])
-        osutil.ensuredir(dest_file_path.parent)
-
-        abs_source_file_path = pathlib.Path(__file__).parent / source_file_path
-        osutil.copyfile(abs_source_file_path, dest_file_path)
-
-        if dest_file_path.suffix == ".js":
-            app.add_js_file(str(dest_file_path.relative_to(static_dir)))
-        elif dest_file_path.suffix == ".css":
-            app.add_css_file(str(dest_file_path.relative_to(static_dir)))
-
-    lightbox_options_path = dest_path / "js" / "lightbox2-options.js"
-    lightbox_options_path.write_text(render_lightbox2_option_method_call(env.config))
-    app.add_js_file(str(lightbox_options_path.relative_to(static_dir)))
+def on_html_page_context(
+    app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: nodes.document
+) -> None:
+    """Add the CSS and JS to the individual pages"""
+    for source_file_path in STATIC_FILES:
+        if source_file_path.suffix == ".js":
+            app.add_js_file(str(source_file_path))
+        elif source_file_path.suffix == ".css":
+            app.add_css_file(str(source_file_path))
+    inlinejs = render_lightbox2_option_method_call(app.config)
+    app.add_js_file(None, body=inlinejs)
 
 
 def html_visit_plantuml(self: HTML5Translator, node: nodes.Element) -> None:
@@ -230,6 +212,10 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     app.add_node(nodes.image, override=True, html=(html_visit_image, html_depart_image))
 
-    app.connect("env-updated", install_static_files)
-
+    static_dir = pathlib.Path(__file__).parent / "assets"
+    app.connect(
+        "builder-inited",
+        (lambda app: app.config.html_static_path.insert(0, static_dir.as_posix())),
+    )
+    app.connect("html-page-context", on_html_page_context)
     return {"version": __version__, "parallel_read_safe": True, "parallel_write_safe": True}
