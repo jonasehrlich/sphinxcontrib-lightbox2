@@ -2,6 +2,10 @@
 
 # Changelog
 
+## v0.6.0 (2026-03-25)
+
+* Fix an issue where the assets were copied into the first `html_static_path[0]`. This is problematic because the static path can be modified by other extensions. ([#2](https://github.com/jonasehrlich/sphinxcontrib-lightbox2/pull/2))
+
 ## v0.5.0 (2025-10-15)
 
 * Switch dependency management to uv
